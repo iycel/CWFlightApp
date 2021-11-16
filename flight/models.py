@@ -36,7 +36,10 @@ class OperatingAirlines(models.Model):
     name = models.CharField(choices=AIRLINES, max_length=50)
 
     def __str__(self):
-        return f'({self.name} | {self.name})' 
+        return f'{self.name}' 
+
+    class Meta:
+        ordering = ['name']
 class Flight(models.Model):
     flight_number = models.CharField(max_length=15)
     operating_airlines = models.ForeignKey(OperatingAirlines, on_delete=models.CASCADE)  # Hava yolu şirketini silersek uçuşuda siler
@@ -70,14 +73,20 @@ class Passenger(models.Model):
     phone = models.CharField(max_length=50)
     update_date = models.DateTimeField(auto_now=True)
     create_date = models.DateTimeField(auto_now_add=True)
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
+    # flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.last_name} {self.first_name}'
 
+    class Meta:
+        ordering = ['last_name']
 class FlightReservation(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE) 
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     first_name = models.ForeignKey(User, on_delete=models.PROTECT)
 
-    # def __str__(self):
+    def __str__(self):
+        return f'{self.flight} {self.passenger}'
 
 
 
